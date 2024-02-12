@@ -2,6 +2,7 @@ from datetime import datetime
 import pytz
 import logging
 import os
+import requests
 
 
 def get_fichier_sortie_args():
@@ -30,6 +31,14 @@ def get_time(timezone):
     datetime_tz=datetime.now(tz)
     return "Heure de " + timezone + " " + datetime_tz.strftime("%H:%M:%S")
 
+
+def get_product(barcode):
+    url=f"https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
+    response = requests.get(url)
+    data=response.json()
+    return data
+
+
 if __name__=="__main__":
 
     logging.basicConfig(filename=get_fichier_sortie(), encoding='utf-8', level=logging.DEBUG)
@@ -37,5 +46,7 @@ if __name__=="__main__":
 
     print(get_time('Indian/Reunion'))
     print(get_time('Europe/Paris'))
-    print(get_time(None))
+    # print(get_time(None))
+
+    print(get_product("8000500273296"))
 
